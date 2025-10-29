@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simplicity - AI Coding Agent</title>
+    <meta name="description" content="Simplicity helps you move faster by working asynchronously on tasks in your GitHub repo. Fix bugs, update dependencies, migrate code, and add new features.">
+    
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    
+    <!-- Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+    
+    <style>
+        /* CSS Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #000000;
+            color: #E4E4E7;
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        /* Container */
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 64px;
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 24px;
+        }
+
+        h2 {
+            font-size: 40px;
+            font-weight: 700;
+            line-height: 1.3;
+            margin-bottom: 24px;
+        }
+
+        h3 {
+            font-size: 24px;
+            font-weight: 600;
+            line-height: 1.4;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #A3A3A3;
+        }
+
+        code {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            background-color: #0A0A0A;
+            padding: 4px 8px;
+            border-radius: 4px;
+            border: 1px solid #262626;
+        }
+
+        /* Spacing */
+        .section {
+            padding: 64px 0;
+        }
+
+        .space-xs { margin: 8px; }
+        .space-sm { margin: 16px; }
+        .space-md { margin: 24px; }
+        .space-lg { margin: 32px; }
+        .space-xl { margin: 48px; }
+        .space-xxl { margin: 64px; }
+        .space-xxxl { margin: 96px; }
+
+        /* Hero Section */
+        .hero {
+            min-height: 560px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: 
+                linear-gradient(45deg, transparent 40%, rgba(38, 38, 38, 0.3) 50%, transparent 60%),
+                linear-gradient(-45deg, transparent 40%, rgba(38, 38, 38, 0.2) 50%, transparent 60%);
+            background-size: 100px 100px, 80px 80px;
+            animation: gridFlow 20s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes gridFlow {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(100px, 100px); }
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+        }
+
+        .gradient-text {
+            background: linear-gradient(45deg, #60A5FA, #3B82F6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            font-size: 20px;
+            color: #A3A3A3;
+            max-width: 650px;
+            margin: 0 auto 32px;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 24px;
+            font-size: 16px;
+            font-weight: 600;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: all 200ms ease-out;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background-color: #3B82F6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #60A5FA;
+            transform: translateY(-2px);
+            box-shadow: 0px 4px 24px rgba(59, 130, 246, 0.15);
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            color: #E4E4E7;
+            border: 1px solid #262626;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0A0A0A;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 24px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        /* Dual Mode Section */
+        .dual-mode {
+            background-color: #0A0A0A;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            padding: 32px;
+            position: relative;
+        }
+
+        .mode-divider {
+            position: absolute;
+            top: 32px;
+            bottom: 32px;
+            left: 50%;
+            width: 1px;
+            background-color: #262626;
+            transform: translateX(-50%);
+        }
+
+        .mode-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+        }
+
+        .mode-card {
+            padding: 24px;
+            transition: all 300ms ease-in-out;
+        }
+
+        .mode-card:hover {
+            box-shadow: inset 0 0 10px rgba(59, 130, 246, 0.1);
+            border-radius: 8px;
+        }
+
+        .mode-header {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .mode-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #E4E4E7;
+        }
+
+        .mode-description {
+            margin-bottom: 20px;
+            color: #A3A3A3;
+        }
+
+        .use-cases {
+            list-style: none;
+        }
+
+        .use-cases li {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: #E4E4E7;
+        }
+
+        .checkmark {
+            color: #3B82F6;
+        }
+
+        /* Capabilities Grid */
+        .capabilities-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 32px;
+            margin-top: 48px;
+        }
+
+        .capability-card {
+            background-color: #0A0A0A;
+            border: 1px solid #262626;
+            border-radius: 8px;
+            padding: 24px;
+            transition: all 250ms cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .capability-card:hover {
+            transform: translateY(-4px);
+            border-color: #373737;
+            box-shadow: 0px 4px 24px rgba(59, 130, 246, 0.15);
+        }
+
+        .capability-icon {
+            width: 32px;
+            height: 32px;
+            color: #3B82F6;
+            margin-bottom: 16px;
+        }
+
+        .capability-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #E4E4E7;
+            margin-bottom: 12px;
+        }
+
+        .capability-description {
+            font-size: 14px;
+            color: #A3A3A3;
+        }
+
+        /* Workflow Section */
+        .workflow {
+            background-color: #0A0A0A;
+            border-radius: 8px;
+            padding: 48px;
+            margin-top: 48px;
+        }
+
+        .workflow-steps {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 32px;
+            margin-top: 32px;
+        }
+
+        .workflow-step {
+            text-align: center;
+            position: relative;
+        }
+
+        .workflow-step::after {
+            content: '';
+            position: absolute;
+            top: 24px;
+            right: -16px;
+            width: 32px;
+            height: 2px;
+            background-color: #262626;
+        }
+
+        .workflow-step:last-child::after {
+            display: none;
+        }
+
+        .step-number {
+            width: 48px;
+            height: 48px;
+            background-color: #3B82F6;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            margin: 0 auto 16px;
+        }
+
+        .step-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #E4E4E7;
+            margin-bottom: 8px;
+        }
+
+        .step-description {
+            font-size: 14px;
+            color: #A3A3A3;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            text-align: center;
+            padding: 96px 0;
+        }
+
+        .cta-title {
+            font-size: 48px;
+            font-weight: 700;
+            margin-bottom: 24px;
+        }
+
+        .cta-description {
+            font-size: 18px;
+            color: #A3A3A3;
+            max-width: 600px;
+            margin: 0 auto 48px;
+        }
+
+        /* Footer */
+        .footer {
+            border-top: 1px solid #262626;
+            padding: 32px 0;
+            text-align: center;
+            color: #525252;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .mode-grid {
+                grid-template-columns: 1fr;
+                gap: 0;
+            }
+            
+            .mode-divider {
+                display: none;
+            }
+            
+            .capabilities-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 40px;
+            }
+            
+            h2 {
+                font-size: 32px;
+            }
+            
+            .hero {
+                min-height: 480px;
+            }
+            
+            .section {
+                padding: 48px 0;
+            }
+            
+            .btn-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn {
+                width: 100%;
+                max-width: 280px;
+            }
+            
+            .workflow-steps {
+                grid-template-columns: 1fr;
+            }
+            
+            .workflow-step::after {
+                display: none;
+            }
+            
+            .cta-title {
+                font-size: 32px;
+            }
+        }
+
+        /* Focus styles for accessibility */
+        .btn:focus,
+        .capability-card:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.4);
+        }
+
+        /* Loading animation for icons */
+        .icon-loading {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h1>
+                    MiniMax M2 & Agent: <span class="gradient-text">Ingenious in Simplicity</span>
+                </h1>
+                <p class="hero-subtitle">
+                    Simplicity helps you move faster by working asynchronously on tasks in your GitHub repo. 
+                    Fix bugs, update dependencies, migrate code, and add new features with full transparency.
+                </p>
+                <div class="btn-group">
+                    <a href="#capabilities" class="btn btn-primary">
+                        Start Building
+                    </a>
+                    <a href="#workflow" class="btn btn-secondary">
+                        View Documentation
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dual Mode Section -->
+    <section class="section">
+        <div class="container">
+            <h2>Choose Your Mode</h2>
+            <p style="max-width: 600px; margin-bottom: 48px;">
+                Simplicity offers two powerful modes to match your needs, from quick tasks to comprehensive development work.
+            </p>
+            
+            <div class="dual-mode">
+                <div class="mode-grid">
+                    <div class="mode-card">
+                        <div class="mode-header">
+                            <i data-lucide="zap" style="color: #3B82F6; width: 24px; height: 24px;"></i>
+                            <h3 class="mode-title">Lightning Mode</h3>
+                        </div>
+                        <p class="mode-description">
+                            High-efficiency, high-speed agent for instant output in scenarios like conversational Q&A, 
+                            lightweight search, and simple coding tasks.
+                        </p>
+                        <ul class="use-cases">
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Quick code reviews and suggestions
+                            </li>
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Simple bug fixes and patches
+                            </li>
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Basic documentation updates
+                            </li>
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Lightweight code transformations
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <div class="mode-card">
+                        <div class="mode-header">
+                            <i data-lucide="cpu" style="color: #3B82F6; width: 24px; height: 24px;"></i>
+                            <h3 class="mode-title">Pro Mode</h3>
+                        </div>
+                        <p class="mode-description">
+                            Professional agent capabilities with optimal performance on complex, long-running tasks. 
+                            Excels at in-depth research, full-stack development, and comprehensive projects.
+                        </p>
+                        <ul class="use-cases">
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Complex system migrations
+                            </li>
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Full-stack feature development
+                            </li>
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Comprehensive dependency updates
+                            </li>
+                            <li>
+                                <i data-lucide="check" class="checkmark"></i>
+                                Multi-language framework migrations
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="mode-divider"></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Capabilities -->
+    <section class="section" id="capabilities">
+        <div class="container">
+            <h2>What Simplicity Can Do Today</h2>
+            <p style="max-width: 700px; margin-bottom: 48px;">
+                Simplicity demonstrates its work as it makes progress, so you never have to guess what code it's writing, 
+                or what it's thinking. Every action is transparent and verifiable.
+            </p>
+            
+            <div class="capabilities-grid">
+                <div class="capability-card" tabindex="0">
+                    <i data-lucide="bug" class="capability-icon"></i>
+                    <h3 class="capability-title">Fix Bugs with Test Verified Patches</h3>
+                    <p class="capability-description">
+                        Automatically identify, reproduce, and fix bugs with comprehensive test coverage. 
+                        Each fix includes verification tests to ensure the issue doesn't recur.
+                    </p>
+                </div>
+                
+                <div class="capability-card" tabindex="0">
+                    <i data-lucide="arrow-up-circle" class="capability-icon"></i>
+                    <h3 class="capability-title">Handle Version Bumps & Dependency Upgrades</h3>
+                    <p class="capability-description">
+                        Seamlessly upgrade dependencies and handle version conflicts. Automatically resolves breaking changes 
+                        and updates configuration files across your entire codebase.
+                    </p>
+                </div>
+                
+                <div class="capability-card" tabindex="0">
+                    <i data-lucide="shuffle" class="capability-icon"></i>
+                    <h3 class="capability-title">Perform Scoped Code Transformations</h3>
+                    <p class="capability-description">
+                        Apply targeted code changes across specific files or modules. Refactor code patterns, 
+                        update coding standards, and implement architectural improvements safely.
+                    </p>
+                </div>
+                
+                <div class="capability-card" tabindex="0">
+                    <i data-lucide="git-branch" class="capability-icon"></i>
+                    <h3 class="capability-title">Migrate Code Across Languages or Frameworks</h3>
+                    <p class="capability-description">
+                        Intelligent code translation between programming languages and frameworks. 
+                        Maintains functionality while adapting to new ecosystems and best practices.
+                    </p>
+                </div>
+                
+                <div class="capability-card" tabindex="0">
+                    <i data-lucide="plus-circle" class="capability-icon"></i>
+                    <h3 class="capability-title">Ship Isolated, Scoped Features</h3>
+                    <p class="capability-description">
+                        Develop and deploy new features independently without affecting existing functionality. 
+                        Each feature is contained and tested in isolation before integration.
+                    </p>
+                </div>
+                
+                <div class="capability-card" tabindex="0">
+                    <i data-lucide="git-pull-request" class="capability-icon"></i>
+                    <h3 class="capability-title">Open PRs with Runnable Code & Test Results</h3>
+                    <p class="capability-description">
+                        Automatically creates comprehensive pull requests with detailed changelogs, 
+                        test results, and instructions. All code is ready to run and verify.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Workflow Section -->
+    <section class="section" id="workflow">
+        <div class="container">
+            <div class="workflow">
+                <h2 style="text-align: center; margin-bottom: 16px;">How Simplicity Works</h2>
+                <p style="text-align: center; max-width: 600px; margin: 0 auto;">
+                    Once you give Simplicity a task, it follows a systematic approach to ensure quality and transparency.
+                </p>
+                
+                <div class="workflow-steps">
+                    <div class="workflow-step">
+                        <div class="step-number">1</div>
+                        <h3 class="step-title">Environment Setup</h3>
+                        <p class="step-description">Spins up fresh dev environment in VM and installs dependencies</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">2</div>
+                        <h3 class="step-title">Test Creation</h3>
+                        <p class="step-description">Writes comprehensive tests to verify current behavior</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">3</div>
+                        <h3 class="step-title">Code Changes</h3>
+                        <p class="step-description">Makes targeted changes with full transparency</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">4</div>
+                        <h3 class="step-title">Test Verification</h3>
+                        <p class="step-description">Runs tests to ensure changes work correctly</p>
+                    </div>
+                    
+                    <div class="workflow-step">
+                        <div class="step-number">5</div>
+                        <h3 class="step-title">PR Creation</h3>
+                        <p class="step-description">Opens pull request with runnable code and results</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">Ready to Accelerate Your Development?</h2>
+            <p class="cta-description">
+                Join developers who are moving faster with Simplicity. 
+                Experience the future of AI-assisted coding with full transparency and control.
+            </p>
+            <div class="btn-group">
+                <a href="#" class="btn btn-primary">Get Started Today</a>
+                <a href="#" class="btn btn-secondary">Schedule a Demo</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2025 MiniMax. Built with Simplicity AI Coding Agent.</p>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide icons
+        lucide.createIcons();
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Add intersection observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Observe capability cards for scroll animations
+        document.querySelectorAll('.capability-card').forEach(card => {
+            card.style.opacity = '0';
+            card.style.transform = 'translateY(20px)';
+            card.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
+            observer.observe(card);
+        });
+
+        // Add hover effects for better interactivity
+        document.querySelectorAll('.capability-card').forEach(card => {
+            card.addEventListener('mouseenter', () => {
+                card.style.transform = 'translateY(-8px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', () => {
+                card.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+
+        // Add loading state for CTA buttons
+        document.querySelectorAll('.btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                if (btn.classList.contains('btn-primary')) {
+                    const originalText = btn.textContent;
+                    btn.textContent = 'Loading...';
+                    btn.disabled = true;
+                    
+                    // Simulate loading (remove in production)
+                    setTimeout(() => {
+                        btn.textContent = originalText;
+                        btn.disabled = false;
+                    }, 2000);
+                }
+            });
+        });
+    </script>
+</body>
+</html>
