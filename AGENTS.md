@@ -1,0 +1,1 @@
+Now I need to create the AI SDK chatbot component that demonstrates the 6 core capabilities. This will be a fully functional chatbot using AI SDK patterns that can interact with users and showcase Simplicity's capabilities.
