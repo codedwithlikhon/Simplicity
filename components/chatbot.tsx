@@ -3,6 +3,8 @@
 import { useChat } from 'ai/react'
 import { useState, useRef, useEffect } from 'react'
 import { Send, Bot, User, X, Minimize2, Maximize2, Bug, ArrowUpCircle, Shuffle, GitBranch, PlusCircle, GitPullRequest } from 'lucide-react'
+import ReactMarkdown from 'react-markdown'
+import remarkGfm from 'remark-gfm'
 
 export function Chatbot() {
   const [isOpen, setIsOpen] = useState(false)
@@ -87,7 +89,9 @@ export function Chatbot() {
                       : 'bg-gray-800 text-gray-100 border border-gray-700'
                   }`}>
                     <div className="whitespace-pre-wrap text-sm leading-relaxed">
-                      {message.content}
+                      <ReactMarkdown remarkPlugins={[remarkGfm]}>
+                        {message.content}
+                      </ReactMarkdown>
                     </div>
                   </div>
                 </div>
